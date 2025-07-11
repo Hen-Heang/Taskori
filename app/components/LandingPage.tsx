@@ -345,7 +345,7 @@ const staggerContainer = {
                     ))}
                   </div>
                   <blockquote className="text-xl sm:text-2xl text-gray-700 mb-8 leading-relaxed">
-                    "{testimonials[currentTestimonial].quote}"
+                    &ldquo;{testimonials[currentTestimonial].quote}&rdquo;
                   </blockquote>
                   <div className="flex items-center justify-center space-x-4">
                     <img
