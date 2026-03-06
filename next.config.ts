@@ -1,11 +1,10 @@
 import type { NextConfig } from "next";
 
 function sanitizeServerLocalStorage() {
-  const globalRef = globalThis as typeof globalThis & {
-    localStorage?: unknown;
-  };
+  const globalRef = globalThis as typeof globalThis;
+  const mutableGlobal = globalRef as Record<string, unknown>;
 
-  const storage = globalRef.localStorage as
+  const storage = mutableGlobal.localStorage as
     | { getItem?: unknown; setItem?: unknown; removeItem?: unknown }
     | undefined;
 
@@ -19,7 +18,7 @@ function sanitizeServerLocalStorage() {
   if (looksLikeWebStorage) return;
 
   try {
-    delete globalRef.localStorage;
+    delete mutableGlobal.localStorage;
   } catch {
     try {
       Object.defineProperty(globalRef, "localStorage", {
@@ -28,7 +27,7 @@ function sanitizeServerLocalStorage() {
         configurable: true,
       });
     } catch {
-      globalRef.localStorage = undefined;
+      mutableGlobal.localStorage = undefined;
     }
   }
 }

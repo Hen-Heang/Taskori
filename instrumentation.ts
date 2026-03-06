@@ -3,11 +3,9 @@ export async function register() {
     return;
   }
 
-  const globalRef = globalThis as typeof globalThis & {
-    localStorage?: unknown;
-  };
+  const globalRef = globalThis as typeof globalThis;
 
-  const storage = globalRef.localStorage as
+  const storage = (globalRef as { localStorage?: unknown }).localStorage as
     | { getItem?: unknown }
     | undefined;
 
@@ -20,12 +18,12 @@ export async function register() {
   }
 
   try {
+    delete (globalRef as { localStorage?: unknown }).localStorage;
+  } catch {
     Object.defineProperty(globalRef, "localStorage", {
       value: undefined,
       writable: true,
       configurable: true,
     });
-  } catch {
-    globalRef.localStorage = undefined;
   }
 }
